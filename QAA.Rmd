@@ -2,7 +2,9 @@
 title: "Assignment - QAA"
 author: "Angela Crabtree"
 date: "9/1/2021"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -141,13 +143,17 @@ trimmomatic PE -threads 4 \
 ### Outputting Distribution Data for R
 
 ```
-zcat 2_2B_control.1.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > 2_2B_control_R1_distr.txt
+zcat 2_2B_control.1.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > 
+  2_2B_control_R1_distr.txt
 
-zcat 2_2B_control.2.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > 2_2B_control_R2_distr.txt
+zcat 2_2B_control.2.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > 
+  2_2B_control_R2_distr.txt
 
-zcat Undetermined.1.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > Undetermined_R1_distr.txt
+zcat Undetermined.1.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > 
+  Undetermined_R1_distr.txt
 
-zcat Undetermined.2.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > Undetermined_R2_distr.txt
+zcat Undetermined.2.trim.fastq.gz | awk 'NR % 4 == 2 { print length() }' | sort -n | uniq -c > 
+  Undetermined_R2_distr.txt
 ```
 
 ```{r}
@@ -234,7 +240,8 @@ cd $d
     --outFileNamePrefix $d/$prfx
 
 ## run python script to get counts of mapped and unmapped reads
-python /projects/bgmp/acrabtre/bioinfo/Bi623/QAA/scripts/inspector_sam.py $samfile > $d/${prfx}map_counts.txt
+python /projects/bgmp/acrabtre/bioinfo/Bi623/QAA/scripts/inspector_sam.py $samfile > 
+  $d/${prfx}map_counts.txt
 
 ## run HTseq to count reads that map to features 
 htseq-count --stranded=no $samfile $d/mmus/Mus_musculus.GRCm39.104.gtf > $d/${prfx}hts.genecounts
@@ -260,7 +267,8 @@ samfile=$d/${prfx}Aligned.out.sam
     --outFileNamePrefix $d/$prfx
 
 ## run python script to get counts of mapped and unmapped reads
-python /projects/bgmp/acrabtre/bioinfo/Bi623/QAA/scripts/inspector_sam.py $samfile > $d/${prfx}map_counts.txt
+python /projects/bgmp/acrabtre/bioinfo/Bi623/QAA/scripts/inspector_sam.py $samfile > 
+  $d/${prfx}map_counts.txt
 
 ## run HTseq to count reads that map to features 
 htseq-count --stranded=no $samfile $d/mmus/Mus_musculus.GRCm39.104.gtf > $d/${prfx}hts.genecounts
@@ -303,7 +311,7 @@ htseq-count --stranded=no
 - 2_2B_control: htseq mapped ~83% of total reads to reference genome
 - Undetermined: htseq mapped ~52% of total reads to reference genome
 
-> I propose this library is not stranded because the number of mapped reads (in gene counts files) after running HTSeq are extremely low. For example, in the "Undetermined" sample, only 2.5% of the reads mapped to the reference genome when htseq assumed the library was stranded, whereas 52% of the reads were mapped when the library was considered non-stranded. 
+> I propose this library is stranded because the number of mapped reads (in gene counts files) after running HTSeq are extremely low. If the kit was non-stranded, the counts should be about half of the stranded=no counts. For example, in the "Undetermined" sample, only 2.5% of the reads mapped to the reference genome stranded=yes, whereas 52% of the reads were mapped when stranded=no. If we ran the stranded=reverse option, we would expect to find the missing ~50% because only the reverse complement of the reads are able to the reference genome. 
 
 2_2B_control
 
