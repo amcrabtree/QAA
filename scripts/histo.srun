@@ -1,0 +1,21 @@
+#!/bin/bash
+#SBATCH --partition=bgmp        	### Partition (like a queue in PBS)
+#SBATCH --job-name=homework        	### Job Name
+#SBATCH --output=homework-%j.log   	### File in which to store job output
+#SBATCH --error=homework-%j.err    	### File in which to store job error messages
+#SBATCH --time=0-20:00:00       	### Wall clock time limit in Days-HH:MM:SS
+#SBATCH --nodes=1               	### Number of nodes needed for the job
+#SBATCH --cpus-per-task=1       	### Number of CPUs to be used per task
+#SBATCH --account=bgmp          	### Account used for job submission
+#SBATCH --mail-user=acrabtre@uoregon.edu    ### email for job submission notifications
+#SBATCH --mail-type=NONE         	### specifies types of notification emails to send
+
+conda activate qaa
+
+#./histograms.py -f /projects/bgmp/shared/2017_sequencing/demultiplexed/2_2B_control_S2_L008_R1_001.fastq.gz -r 101 -o ../img/2_2B_control_R1_hist.png
+
+./histograms.py -f /projects/bgmp/shared/2017_sequencing/demultiplexed/2_2B_control_S2_L008_R2_001.fastq.gz -r 101 -o ../img/2_2B_control_R2_hist.png
+
+./histograms.py -f /projects/bgmp/shared/2017_sequencing/demultiplexed/Undetermined_S0_L008_R1_001.fastq.gz -r 101 -o ../img/Undetermined_R1_hist.png
+
+./histograms.py -f /projects/bgmp/shared/2017_sequencing/demultiplexed/Undetermined_S0_L008_R2_001.fastq.gz -r 101 -o ../img/Undetermined_R2_hist.png
